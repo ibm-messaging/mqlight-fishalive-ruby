@@ -1,0 +1,20 @@
+---
+applications:
+- name:  MQL.sample.ruby.backend
+  disk: 1024M
+  path: backend
+  command: "bundle exec ruby sinatra_backend.rb -p $VCAP_APP_PORT"
+  memory: 256M
+  instances: 2
+  no-route: true
+  services:
+  - MQLight-sampleservice
+- name:  MQL.sample.ruby.frontend
+  disk: 1024M
+  path: frontend
+  command: "bundle exec ruby sinatra_frontend.rb -p $VCAP_APP_PORT"
+  memory: 256M
+  instances: 1
+  host: mqlightsample-ruby-${random-word}
+  services:
+  - MQLight-sampleservice
