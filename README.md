@@ -9,6 +9,6 @@ for more info on these samples.
 ## Deployment
 
 ```
-$ cf push MQL.sample.backend.ruby
-$ cf push MQL.sample.frontend.ruby
+$ cf push MQL.sample.ruby.backend
+$ cf push MQL.sample.ruby.frontend
 ```
