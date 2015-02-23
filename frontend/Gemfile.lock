@@ -6,7 +6,7 @@ GEM
     haml (4.0.6)
       tilt
     json (1.8.1)
-    mqlight (1.0.2014120914.beta)
+    mqlight (1.0.2015020300.beta)
     rack (1.6.0)
     rack-protection (1.5.3)
       rack
