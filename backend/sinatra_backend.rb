@@ -15,7 +15,7 @@ require 'securerandom'
 configure do
   SUBSCRIBE_TOPIC = 'mqlight/sample/words'
   PUBLISH_TOPIC = 'mqlight/sample/wordsuppercase'
-  SHARE_ID = 'ruby-back-end'
+  SHARE_ID = "fishalive-workers"
 
   opts = { id: "sinatra_backend_#{SecureRandom.hex[0..6]}" }
 
@@ -24,7 +24,7 @@ configure do
     mqlight_service_name = 'mqlight'
     mqlight_service = vcap_services[mqlight_service_name]
     credentials = mqlight_service.first['credentials']
-    uri = credentials['connectionLookupURI']
+    uri = credentials['nonTLSConnectionLookupURI']
     opts[:user] = credentials['username']
     opts[:password] = credentials['password']
   else
