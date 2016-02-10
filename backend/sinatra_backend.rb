@@ -16,17 +16,26 @@ configure do
   SUBSCRIBE_TOPIC = 'mqlight/sample/words'
   PUBLISH_TOPIC = 'mqlight/sample/wordsuppercase'
   SHARE_ID = "fishalive-workers"
+  mqlight_service_name = 'mqlight'
+  messagehub_service_name = 'messagehub'
 
   opts = { id: "sinatra_backend_#{SecureRandom.hex[0..6]}" }
 
   if ENV['VCAP_SERVICES']
     vcap_services = JSON.parse(ENV['VCAP_SERVICES'])
-    mqlight_service_name = 'mqlight'
-    mqlight_service = vcap_services[mqlight_service_name]
-    credentials = mqlight_service.first['credentials']
-    uri = credentials['connectionLookupURI']
-    opts[:user] = credentials['username']
-    opts[:password] = credentials['password']
+    for service in vcap_services.keys
+      if service.start_with?(mqlight_service_name)
+        mqlight_service = vcap_services[service][0]
+        uri = mqlight_service['credentials']['nonTLSConnectionLookupURI']
+        opts[:user] = mqlight_service['credentials']['username']
+        opts[:password] = mqlight_service['credentials']['password']
+      elsif service.start_with?(messagehub_service_name)
+        messagehub_service = vcap_services[service][0]
+        uri = messagehub_service['credentials']['connectionLookupURI']
+        opts[:user] = messagehub_service['credentials']['user']
+        opts[:password] = messagehub_service['credentials']['password']
+      end
+    end
   else
     uri = 'amqp://127.0.0.1:5672'
   end
