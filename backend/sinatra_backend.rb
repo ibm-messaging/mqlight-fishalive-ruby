@@ -31,7 +31,7 @@ configure do
         opts[:password] = mqlight_service['credentials']['password']
       elsif service.start_with?(messagehub_service_name)
         messagehub_service = vcap_services[service][0]
-        uri = messagehub_service['credentials']['connectionLookupURI']
+        uri = messagehub_service['credentials']['mqlight_lookup_url']
         opts[:user] = messagehub_service['credentials']['user']
         opts[:password] = messagehub_service['credentials']['password']
       end
