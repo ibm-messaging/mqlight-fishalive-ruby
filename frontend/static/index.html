@@ -1,11 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<!--     (C) COPYRIGHT International Business Machines Corp., 2013 -->
-<!-- All rights reserved * Licensed Materials - Property of IBM         -->
+<!--
+ Copyright (c) 2014, 2016 IBM Corporation and other Contributors.
+ 
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+
+ Contributors:
+ IBM - Initial Contribution
+-->
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="style.css" rel="stylesheet" type="text/css" />
-<title>MQ Light Service for Bluemix:- Worker Offload Pattern</title>
+<title>MQ Light for Bluemix Application:- Worker Offload Pattern</title>
 <script type="text/javascript">
 
 var infoTimeout = null;
@@ -17,7 +26,7 @@ var infoTimeout = null;
   function schedulePoll(timeoutmillis) {
     setTimeout(function() { doGET();}, timeoutmillis);
   }
-  
+
   function doGET() {
     try {
       var url = "rest/wordsuppercase?" + (new Date()).getTime(); // Cross-browser cache disable
@@ -63,7 +72,7 @@ var infoTimeout = null;
            .replace(/"/g, "&quot;")
            .replace(/'/g, "&#039;");
    }
-  
+
   function printResult(result) {
     var resultWord = result.word;
     var divClass = "result";
@@ -73,11 +82,13 @@ var infoTimeout = null;
         divClass = "rubyresult";
       } else if ((/^Node/).test(backEnd)) {
         divClass = "noderesult";
-      } else if ((/^Liberty/).test(backEnd)) {
-        divClass = "libertyresult";
+      } else if ((/^Python/).test(backEnd)) {
+        divClass = "pythonresult";
+      } else if ((/^Java/).test(backEnd)) {
+        divClass = "javaresult";
       }
     }
-    
+
     var resultsDiv = document.getElementById("results");
     var resultDiv = document.createElement("div");
     resultDiv.className = divClass;    
@@ -105,21 +116,21 @@ var infoTimeout = null;
       showMostRecentError("REST/HTTP POST of words failed: " + err.message);
     } 
   }
-  
+
   function showMostRecentError(msg) {
     var errorsContainer = document.getElementById("errorsbar");
     var errorsDiv = document.getElementById("errors");
     errorsDiv.innerHTML = new Date() + ": " + msg;
     errorsContainer.style.display = "block";
   }
-  
+
   function showMostRecentInfo(msg) {
     var infoContainer = document.getElementById("infobar");
     var infoDiv = document.getElementById("information");
     infoDiv.innerHTML = msg;
     infoContainer.style.display = "block";
   }  
-  
+
   function checkSubmitKey(e) {
     var charCode;
     if (e && e.which) {
@@ -131,18 +142,17 @@ var infoTimeout = null;
     if (charCode == 13) {
       submitRequest();
     }
-  }  
+  }
 </script>
 </head>
 <body onload="onLoad();">
 <div class="header">
     <img src="images/lanim.gif" width="150" height="47" border="0" id="header-left-img">
-    <img src="images/WEBSPHERE_18P_UNIX.GIF" width="110" height="14" border="0" id="header-right-img">
 </div>
 <div class="main">
-  <h2>Sample MQ Light Service for Bluemix Application:- Worker Offload Pattern</h2>
+  <h2>Sample MQ Light Bluemix Application:- Worker Offload Pattern</h2>
   <p>This sample demonstrates a simple worker-offload
-    pattern using the MQ Light messaging service.</p>
+    pattern using the Message Hub service MQ Light API support.</p>
   <img src="images/workeroffload.jpg" alt="Worker offload diagram" />
   <p>The worker-offload
     pattern improves responsiveness by allowing a front-end user interface
@@ -161,10 +171,8 @@ var infoTimeout = null;
       <ul>
         <li>Messages might not arrive in the order in which they are sent.<br/>
             This is because each worker can take a variable amount of time to process a message.</li>
-        <li>If you open this page in multiple browsers, then only one will see each word.<br/>
-            This is because in this sample they all share a single durable subscription for notifications.</li>
-        <li>If you run both the Node.js and Liberty for Java back-end workers, then you will
-            see two notifications for each word.<br/>
+        <li>If you open this page in multiple browsers, then each will receive all words.<br/>
+            This is because in this sample each instance subscribes to notifications from all backend workers.</li>
             This is because the sample workers use different durable subscriptions.</li>
         <li>HTTP GET polling of notification messages is uncommon in real apps.<br/>
             Apps normally process notifications as they arrive in the front-end, and update state in a
@@ -172,22 +180,23 @@ var infoTimeout = null;
       </ul>
    <div class="noderesult">Notifications from the Node.js sample back-end look like this</div>
    <div class="rubyresult">Notifications from the Ruby sample back-end look like this</div>
-   <div class="libertyresult">Notifications from the Liberty for Java sample back-end look like this</div>
+   <div class="pythonresult">Notifications from the Python sample back-end look like this</div>
+   <div class="javaresult">Notifications from the Java sample back-end look like this</div>
 
   <div class="inputform">
     <form>
       <b>Sentence:</b>
       <input type="text" size="100" maxlength="200" name="message"
         id="message" onkeypress="checkSubmitKey(event)"
-        value="One, Two, Three, Four, Five, Once I Caught a Fish Alive"/>
+        value="One, Two, Three, Four, Five, Once, I, Caught, a, Fish, Alive"/>
       <input type="button" id="submit"
         value="Submit Work " onclick="submitRequest()" />
     </form>
   </div>
   <div id="results"> 
- 
+
   </div>
- 
+
 </div>
 
  <div id="bars">
