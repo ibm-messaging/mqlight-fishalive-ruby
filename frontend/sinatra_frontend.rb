@@ -16,7 +16,6 @@ require 'securerandom'
 configure do
   SUBSCRIBE_TOPIC = 'mqlight/sample/wordsuppercase'
   PUBLISH_TOPIC = 'mqlight/sample/words'
-  SHARE_ID = 'ruby-front-end'
   mqlight_service_name = 'mqlight'
   messagehub_service_name = 'messagehub'
 
@@ -42,15 +41,14 @@ configure do
   end
 
   set :client, Mqlight::BlockingClient.new(uri, opts)
-  settings.client.subscribe(SUBSCRIBE_TOPIC, share: SHARE_ID)
+  settings.client.subscribe(SUBSCRIBE_TOPIC)
   set :recv_queue, Queue.new
   set :send_queue, Queue.new
 
   Thread.new do
 
     loop do
-      delivery = settings.client.receive(SUBSCRIBE_TOPIC, share: SHARE_ID,
-                                                          timeout: 1000)
+      delivery = settings.client.receive(SUBSCRIBE_TOPIC, timeout: 1000)
       if delivery
         puts "Received delivery: #{delivery}"
         data = JSON.parse(delivery.data)
